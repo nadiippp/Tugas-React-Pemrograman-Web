@@ -53,14 +53,20 @@ export default function ProductFormModal({
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+    <div
+      className="fixed inset-0 bg-slate-900/45 flex items-center justify-center p-4 z-50 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-[380px] bg-white border border-slate-200 rounded-2xl p-6 shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-start gap-3">
           <div>
-            <h2 className="modal-title">
+            <h2 className="text-xl font-bold text-slate-900">
               {isEdit ? "Edit Produk" : "Tambah Produk"}
             </h2>
-            <p className="modal-subtitle">
+            <p className="text-xs text-slate-500 mt-1">
               {isEdit
                 ? "Perbarui informasi produk yang dipilih."
                 : "Masukkan informasi produk baru."}
@@ -68,7 +74,7 @@ export default function ProductFormModal({
           </div>
           <button
             type="button"
-            className="modal-close-btn"
+            className="text-slate-500 hover:bg-slate-100 hover:text-slate-900 p-1 rounded-md inline-flex items-center justify-center transition-colors cursor-pointer"
             onClick={onClose}
             aria-label="Tutup"
           >
@@ -77,12 +83,17 @@ export default function ProductFormModal({
         </div>
 
         {isEdit && initialData && (
-          <div className="modal-id-badge">ID: {initialData.id}</div>
+          <div className="text-xs font-medium text-slate-600 mt-3.5">
+            ID: {initialData.id}
+          </div>
         )}
 
-        <form onSubmit={handleSubmit} className="modal-form">
-          <div className="form-group">
-            <label htmlFor="product-name" className="form-label">
+        <form onSubmit={handleSubmit} className="mt-4">
+          <div className="mb-4">
+            <label
+              htmlFor="product-name"
+              className="block text-xs font-semibold text-slate-900 mb-1.5"
+            >
               Nama Produk
             </label>
             <Input
@@ -97,8 +108,11 @@ export default function ProductFormModal({
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="product-price" className="form-label">
+          <div className="mb-4">
+            <label
+              htmlFor="product-price"
+              className="block text-xs font-semibold text-slate-900 mb-1.5"
+            >
               Harga (Rp)
             </label>
             <Input
@@ -111,16 +125,24 @@ export default function ProductFormModal({
               }}
               placeholder="Contoh: 5000"
             />
-            <span className={`form-helper ${error ? "form-helper-error" : ""}`}>
+            <span
+              className={`block text-xs mt-1.5 ${
+                error ? "text-red-600 font-medium" : "text-slate-500"
+              }`}
+            >
               {error ? error : "Harga harus lebih dari 0."}
             </span>
           </div>
 
-          <div className="modal-actions">
-            <Button variant="outline-primary" onClick={onClose}>
+          <div className="flex items-center gap-3 mt-5">
+            <Button
+              variant="outline-primary"
+              onClick={onClose}
+              className="min-w-[96px]"
+            >
               Batal
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" className="flex-1">
               {isEdit ? "Simpan Perubahan" : "Simpan Produk"}
             </Button>
           </div>
