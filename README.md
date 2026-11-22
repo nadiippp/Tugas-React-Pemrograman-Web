@@ -1,18 +1,22 @@
-# Manajemen Produk - Fundamental React (Week 12)
+# Manajemen Produk - React Router & Tailwind CSS (Tugas 4)
 
-Aplikasi web **Manajemen Produk** menggunakan **React + Vite** untuk memenuhi tugas mata kuliah Pemrograman Web materi **Fundamental React**.
+Aplikasi web **Manajemen Produk** menggunakan **React + Vite**, **React Router**, dan **Tailwind CSS** untuk memenuhi tugas mata kuliah Pemrograman Web.
 
 ## Fitur Utama
 
-- **Daftar Produk**: Menampilkan kartu produk berisi ID, Nama Produk, dan Harga (format Rupiah `Rp5.000`) menggunakan `map()` dan `key`.
-- **Pencarian Produk**: Filter daftar produk secara real-time berdasarkan nama produk.
-- **Tambah Produk (Pop-up Modal)**: Menambahkan produk baru dengan validasi input nama dan harga (`Harga harus lebih dari 0`).
-- **Edit Produk (Pop-up Modal)**: Memperbarui nama dan harga produk yang dipilih berdasarkan ID.
-- **Hapus Produk (Pop-up Modal Konfirmasi)**: Menampilkan konfirmasi penghapusan beserta detail produk yang akan dihapus.
+- **CRUD Produk (Tetap Bekerja)**:
+  - **Lihat & Cari Produk**: Menampilkan daftar produk dengan filter pencarian nama produk secara *real-time*.
+  - **Tambah Produk (Pop-up Modal)**: Menambahkan produk baru dengan validasi input nama dan harga (`Harga harus lebih dari 0`).
+  - **Edit Produk (Pop-up Modal)**: Memperbarui nama dan harga produk yang dipilih berdasarkan ID.
+  - **Hapus Produk (Pop-up Modal Konfirmasi)**: Menampilkan konfirmasi penghapusan beserta detail produk yang akan dihapus.
+- **Detail Produk (`/products/:id`)**:
+  - Menampilkan informasi lengkap produk sesuai parameter `:id` dari URL (`useParams`) serta tautan `Link` untuk kembali ke halaman daftar produk.
+- **Pengaturan Tampilan (`/settings`)**:
+  - Mengubah mode tampilan daftar produk antara **Grid** (kartu 3 kolom) dan **List** (baris vertikal).
+- **Halaman 404 Not Found (`*`)**:
+  - Menampilkan pesan halaman tidak ditemukan yang jelas beserta tautan kembali ke daftar produk.
 
 ## Struktur Folder (Atomic Design)
-
-Sesuai dengan materi **Atomic Design** pada slide perkuliahan, komponen dikelompokkan berdasarkan perannya dalam antarmuka (UI):
 
 ```text
 src/
@@ -25,13 +29,17 @@ src/
 │   │   ├── SearchBar.jsx
 │   │   └── ProductCard.jsx
 │   ├── organisms/              # Bagian UI yang lebih lengkap
+│   │   ├── Navbar.jsx
 │   │   ├── ProductList.jsx
 │   │   ├── ProductFormModal.jsx
 │   │   └── DeleteConfirmModal.jsx
 │   ├── templates/              # Kerangka tata letak halaman
 │   │   └── ProductLayout.jsx
-│   └── pages/                  # Halaman dengan konten dan state utama
-│       └── ProductPage.jsx
+│   └── pages/                  # Halaman rute aplikasi
+│       ├── ProductPage.jsx
+│       ├── ProductDetailPage.jsx
+│       ├── SettingsPage.jsx
+│       └── NotFoundPage.jsx
 ├── utils/
 │   └── formatPrice.js          # Fungsi pemformat harga ke Rupiah
 ├── App.jsx
@@ -43,7 +51,7 @@ src/
 
 1. Masuk ke direktori proyek:
    ```bash
-   cd manajemen-produk
+   cd "D:\KULIAH\Pemrograman Web\Tugas React"
    ```
 2. Install dependencies:
    ```bash

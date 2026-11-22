@@ -1,131 +1,61 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import ProductLayout from "../templates/ProductLayout";
 import SearchBar from "../molecules/SearchBar";
 import ProductList from "../organisms/ProductList";
-import ProductFormModal from "../organisms/ProductFormModal";
-import DeleteConfirmModal from "../organisms/DeleteConfirmModal";
+import Icon from "../atoms/Icon";
 
-const INITIAL_PRODUCTS = [
-  { id: 1, name: "Pulpen", price: 5000 },
-  { id: 2, name: "Buku Tulis", price: 12000 },
-  { id: 3, name: "Spidol", price: 8000 },
-  { id: 4, name: "Penggaris", price: 6000 },
-  { id: 5, name: "Penghapus", price: 3000 },
-];
-
-export default function ProductPage() {
-  const [products, setProducts] = useState(INITIAL_PRODUCTS);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // State untuk modal tambah & edit
-  const [formModal, setFormModal] = useState({
-    isOpen: false,
-    mode: "add",
-    product: null,
-  });
-
-  // State untuk modal hapus
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    product: null,
-  });
-
+export default function ProductPage({
+  products,
+  searchQuery,
+  onSearchChange,
+  onOpenAdd,
+  onOpenEdit,
+  onOpenDelete,
+  viewMode = "grid",
+}) {
   const filteredProducts = products.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  function handleOpenAdd() {
-    setFormModal({ isOpen: true, mode: "add", product: null });
-  }
-
-  function handleOpenEdit(product) {
-    setFormModal({ isOpen: true, mode: "edit", product });
-  }
-
-  function handleCloseFormModal() {
-    setFormModal({ isOpen: false, mode: "add", product: null });
-  }
-
-  function handleFormSubmit(formData) {
-    if (formModal.mode === "add") {
-      const nextId =
-        products.length > 0
-          ? Math.max(...products.map((item) => item.id)) + 1
-          : 1;
-      const newProduct = {
-        id: nextId,
-        name: formData.name,
-        price: formData.price,
-      };
-      setProducts([...products, newProduct]);
-    } else if (formModal.mode === "edit" && formModal.product) {
-      setProducts(
-        products.map((item) =>
-          item.id === formModal.product.id
-            ? { ...item, name: formData.name, price: formData.price }
-            : item
-        )
-      );
-    }
-    handleCloseFormModal();
-  }
-
-  function handleOpenDelete(product) {
-    setDeleteModal({ isOpen: true, product });
-  }
-
-  function handleCloseDeleteModal() {
-    setDeleteModal({ isOpen: false, product: null });
-  }
-
-  function handleConfirmDelete(productId) {
-    setProducts(products.filter((item) => item.id !== productId));
-    handleCloseDeleteModal();
-  }
 
   const toolbar = (
     <>
       <SearchBar
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => onSearchChange(e.target.value)}
         placeholder="Cari nama produk..."
       />
-      <span className="product-count">{filteredProducts.length} produk</span>
+      <div className="flex items-center justify-between sm:justify-end gap-3">
+        <Link
+          to="/settings"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:border-blue-300 hover:text-blue-700 transition-colors"
+          title="Ubah tampilan Grid/List di Settings"
+        >
+          <Icon name={viewMode === "list" ? "list" : "grid"} size={14} />
+          <span>Tampilan: {viewMode === "list" ? "List" : "Grid"}</span>
+        </Link>
+        <span className="text-sm font-medium text-slate-600 whitespace-nowrap">
+          {filteredProducts.length} produk
+        </span>
+      </div>
     </>
   );
 
   const footerText = `Menampilkan ${filteredProducts.length} dari ${products.length} produk`;
 
   return (
-    <>
-      <ProductLayout
-        title="Manajemen Produk"
-        subtitle="Kelola daftar produk dan harga dalam satu tempat."
-        onAddClick={handleOpenAdd}
-        toolbar={toolbar}
-        footerText={footerText}
-      >
-        <ProductList
-          products={filteredProducts}
-          onEdit={handleOpenEdit}
-          onDelete={handleOpenDelete}
-        />
-      </ProductLayout>
-
-      <ProductFormModal
-        isOpen={formModal.isOpen}
-        mode={formModal.mode}
-        initialData={formModal.product}
-        onClose={handleCloseFormModal}
-        onSubmit={handleFormSubmit}
+    <ProductLayout
+      title="Manajemen Produk"
+      subtitle="Kelola daftar produk dan harga dalam satu tempat."
+      onAddClick={onOpenAdd}
+      toolbar={toolbar}
+      footerText={footerText}
+    >
+      <ProductList
+        products={filteredProducts}
+        onEdit={onOpenEdit}
+        onDelete={onOpenDelete}
+        viewMode={viewMode}
       />
-
-      <DeleteConfirmModal
-        isOpen={deleteModal.isOpen}
-        product={deleteModal.product}
-        onClose={handleCloseDeleteModal}
-        onConfirm={handleConfirmDelete}
-      />
-    </>
+    </ProductLayout>
   );
 }
